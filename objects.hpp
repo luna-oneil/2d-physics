@@ -13,6 +13,7 @@ private:
     Coordinates coords;
     SDL_Color color;
     int radius;
+    Coordinates vel;
 
 
 public:

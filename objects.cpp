@@ -1,9 +1,12 @@
 #include "objects.hpp"
 #include <SDL3/SDL_pixels.h>
+#include <iostream>
 
 Circle::Circle(double x, double y, int radius, int r, int g, int b) {
     coords.x = x;
     coords.y = y;
+    vel.x = 0;
+    vel.y = 0;
     this->radius = radius;
     color.r = r;
     color.g = g;
