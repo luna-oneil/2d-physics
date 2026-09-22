@@ -50,7 +50,8 @@ bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circ
     }
     // circle movement
     for (long long unsigned int i = 0; i < circles.size(); i++) {
-        circles[i].update_coords(0.0, 0.2);
+        circles[i].update_velocity(0.0, 0.0005);
+        circles[i].move();
     }
     // clearing screen
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);

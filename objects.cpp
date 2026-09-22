@@ -18,6 +18,10 @@ Coordinates Circle::get_coords() {
     return coords;
 }
 
+Coordinates Circle::get_velocity() {
+    return vel;
+}
+
 SDL_Color Circle::get_color() {
     return color;
 }
@@ -29,4 +33,13 @@ int Circle::get_radius() {
 void Circle::update_coords(double delta_x, double delta_y) {
     coords.x += delta_x;
     coords.y += delta_y;
+}
+
+void Circle::update_velocity(double delta_x, double delta_y) {
+    vel.x += delta_x;
+    vel.y += delta_y;
+}
+
+void Circle::move() {
+    update_coords(vel.x, vel.y);
 }

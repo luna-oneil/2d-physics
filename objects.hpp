@@ -19,7 +19,10 @@ private:
 public:
     Circle(double x, double y, int radius, int r, int g, int b);
     Coordinates get_coords();
+    Coordinates get_velocity();
     SDL_Color get_color();
     int get_radius();
     void update_coords(double delta_x, double delta_y);
+    void update_velocity(double delta_x, double delta_y);
+    void move();
 };
