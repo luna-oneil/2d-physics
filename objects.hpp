@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL3/SDL_pixels.h>
+#include <cstdint>
 #include "vector2d.hpp"
 
 class Circle {
@@ -12,7 +13,7 @@ private:
 
 
 public:
-    Circle(double x, double y, double radius, Uint8 r, Uint8 g, Uint8 b);
+    Circle(double x, double y, double radius, uint8_t r, uint8_t g, uint8_t b);
     const Vector2d get_pos() const;
     const Vector2d get_vel() const;
     const SDL_Color get_color() const;
