@@ -1,5 +1,5 @@
 Compile: 
-g++ -std=c++20 vector2d.cpp objects.cpp main.cpp -I include -L lib -lSDL3 -o build/main.exe
+g++ -std=c++20 vector2d.cpp circle.cpp main.cpp -I include -L lib -lSDL3 -o build/main.exe
 
 Compile enforcing strict standards:
 g++ -std=c++20 -g -Wall -Werror -pedantic vector2d.cpp circle.cpp main.cpp -I include -L lib -lSDL3 -o build/main.exe
