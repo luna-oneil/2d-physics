@@ -5,7 +5,8 @@
 #include <random>
 #include "circle.hpp"
 
-bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circles);
+bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles);
+void circle_movement(std::vector<Circle> &circles);
 void render(SDL_Renderer *renderer, std::vector<Circle> &circles);
 void draw_circle(SDL_Renderer *renderer, Circle &circle);
 
@@ -30,7 +31,7 @@ int main(int argc, char* argv[]) {
     circles.push_back(Circle(500.0, 100.0, 50, 200, 20, 80));
     // runs the frame()
     // while loop has no body because frame both modifies state and returns whether the window is open
-    while (frame(window, renderer, circles));
+    while (frame(renderer, circles));
 
     // destructions
     SDL_DestroyRenderer(renderer);
@@ -41,11 +42,7 @@ int main(int argc, char* argv[]) {
 }
 
 // returns whether the window should continue being visible
-bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circles) {
-    // setting up random number generation
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> distrib(-0.001, 0.001);
+bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         // set return value to close window
@@ -54,14 +51,21 @@ bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circ
         }
     }
     // circle movement
-    for (long long unsigned int i = 0; i < circles.size(); i++) {
-        circles[i].accelerate(distrib(gen), distrib(gen));
-        circles[i].move();
-    }
+    circle_movement(circles);
     // rendering
     render(renderer, circles);
     // return and say the next frame should happen
     return true;
+}
+
+void circle_movement(std::vector<Circle> &circles) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> distrib(-0.001, 0.001);
+    for (long long unsigned int i = 0; i < circles.size(); i++) {
+        circles[i].accelerate(distrib(gen), distrib(gen));
+        circles[i].move();
+    }
 }
 
 void render(SDL_Renderer *renderer, std::vector<Circle> &circles) {
