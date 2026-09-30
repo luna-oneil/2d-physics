@@ -1,28 +1,23 @@
 #pragma once
 
 #include <SDL3/SDL_pixels.h>
-
-struct Coordinates {
-    double x;
-    double y;
-};
-typedef struct Coordinates Coordinates;
+#include "vector2d.hpp"
 
 class Circle {
 private:
-    Coordinates coords;
+    Vector2d pos;
+    Vector2d vel;
     SDL_Color color;
-    int radius;
-    Coordinates vel;
+    double radius;
 
 
 public:
-    Circle(double x, double y, int radius, int r, int g, int b);
-    Coordinates get_coords();
-    Coordinates get_velocity();
-    SDL_Color get_color();
-    int get_radius();
-    void update_coords(double delta_x, double delta_y);
-    void update_velocity(double delta_x, double delta_y);
+    Circle(double x, double y, double radius, Uint8 r, Uint8 g, Uint8 b);
+    const Vector2d get_pos() const;
+    const Vector2d get_vel() const;
+    const SDL_Color get_color() const;
+    double get_radius() const;
+    void accelerate(Vector2d &vector);
+    void accelerate(double x, double y);
     void move();
 };

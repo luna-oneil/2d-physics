@@ -1,45 +1,37 @@
 #include "objects.hpp"
 #include <SDL3/SDL_pixels.h>
-#include <iostream>
 
-Circle::Circle(double x, double y, int radius, int r, int g, int b) {
-    coords.x = x;
-    coords.y = y;
-    vel.x = 0;
-    vel.y = 0;
+Circle::Circle(double x, double y, double radius, Uint8 r, Uint8 g, Uint8 b) {
+    Vector2d pos(x, y);
+    Vector2d vel(0, 0);
     this->radius = radius;
-    color.r = r;
-    color.g = g;
-    color.b = b;
-    color.a = 255;
+    SDL_Color color = {r, g, b, 255};
 }
 
-Coordinates Circle::get_coords() {
-    return coords;
+const Vector2d Circle::get_pos() const {
+    return pos;
 }
 
-Coordinates Circle::get_velocity() {
+const Vector2d Circle::get_vel() const {
     return vel;
 }
 
-SDL_Color Circle::get_color() {
+const SDL_Color Circle::get_color() const {
     return color;
 }
 
-int Circle::get_radius() {
+double Circle::get_radius() const {
     return radius;
 }
 
-void Circle::update_coords(double delta_x, double delta_y) {
-    coords.x += delta_x;
-    coords.y += delta_y;
+void Circle::accelerate(Vector2d &vector) {
+    vel.move(vector);
 }
 
-void Circle::update_velocity(double delta_x, double delta_y) {
-    vel.x += delta_x;
-    vel.y += delta_y;
+void Circle::accelerate(double x, double y) {
+    vel.move(x, y);
 }
 
 void Circle::move() {
-    update_coords(vel.x, vel.y);
+    pos.move(vel);
 }

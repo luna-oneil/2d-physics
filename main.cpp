@@ -2,6 +2,7 @@
 #include <SDL3/SDL_main.h>
 #include <iostream>
 #include <vector>
+#include <random>
 #include "objects.hpp"
 
 bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circles);
@@ -17,12 +18,11 @@ int main(int argc, char* argv[]) {
     // Create a window and a default renderer
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
-    if (!SDL_CreateWindowAndRenderer("SDL3 Boilerplate", 800, 600, 0, &window, &renderer)) {
+    if (!SDL_CreateWindowAndRenderer("SDL3 Boilerplate", 1000, 1000, 0, &window, &renderer)) {
         SDL_Log("Window/Renderer creation failed: %s", SDL_GetError());
         SDL_Quit();
         return -1;
     }
-
     // initializes list of circles with one circle
     std::vector<Circle> circles;
     circles.push_back(Circle(400.0, 300.0, 100, 240, 230, 30));
@@ -41,6 +41,10 @@ int main(int argc, char* argv[]) {
 
 // returns whether the window should continue being visible
 bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circles) {
+    // setting up random number generation
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> distrib(-0.001, 0.001);
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         // set return value to close window
@@ -50,7 +54,7 @@ bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circ
     }
     // circle movement
     for (long long unsigned int i = 0; i < circles.size(); i++) {
-        circles[i].update_velocity(0.0, 0.0005);
+        circles[i].accelerate(distrib(gen), distrib(gen));
         circles[i].move();
     }
     // clearing screen
@@ -67,7 +71,7 @@ bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circ
 }
 
 void draw_circle(SDL_Renderer *renderer, Circle &circle) {
-    Coordinates center = circle.get_coords();
+    Vector2d center = circle.get_pos();
     SDL_Color color = circle.get_color();
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     int x = circle.get_radius();
