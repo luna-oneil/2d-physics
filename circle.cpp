@@ -1,13 +1,11 @@
-#include "objects.hpp"
+#include "circle.hpp"
 #include <SDL3/SDL_pixels.h>
 #include <cstdint>
 
-Circle::Circle(double x, double y, double radius, uint8_t r, uint8_t g, uint8_t b) {
-    Vector2d pos(x, y);
-    Vector2d vel(0, 0);
-    this->radius = radius;
-    SDL_Color color = {r, g, b, 255};
-}
+Circle::Circle(double x, double y, double radius, uint8_t r, uint8_t g, uint8_t b):
+    pos(x, y), vel(0, 0), radius(radius), color{r, g, b, 255} {}
+
+Circle::Circle() : Circle::Circle(0, 0, 10, 255, 255, 255) {}
 
 const Vector2d Circle::get_pos() const {
     return pos;

@@ -14,6 +14,7 @@ private:
 
 public:
     Circle(double x, double y, double radius, uint8_t r, uint8_t g, uint8_t b);
+    Circle();
     const Vector2d get_pos() const;
     const Vector2d get_vel() const;
     const SDL_Color get_color() const;

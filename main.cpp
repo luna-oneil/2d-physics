@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include "objects.hpp"
+#include "circle.hpp"
 
 bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circles);
 void draw_circle(SDL_Renderer *renderer, Circle &circle);
