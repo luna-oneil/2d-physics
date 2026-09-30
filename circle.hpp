@@ -8,8 +8,8 @@ class Circle {
 private:
     Vector2d pos;
     Vector2d vel;
-    SDL_Color color;
     double radius;
+    SDL_Color color;
 
 
 public:

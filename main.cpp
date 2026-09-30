@@ -6,6 +6,7 @@
 #include "circle.hpp"
 
 bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circles);
+void render(SDL_Renderer *renderer, std::vector<Circle> &circles);
 void draw_circle(SDL_Renderer *renderer, Circle &circle);
 
 int main(int argc, char* argv[]) {
@@ -57,6 +58,13 @@ bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circ
         circles[i].accelerate(distrib(gen), distrib(gen));
         circles[i].move();
     }
+    // rendering
+    render(renderer, circles);
+    // return and say the next frame should happen
+    return true;
+}
+
+void render(SDL_Renderer *renderer, std::vector<Circle> &circles) {
     // clearing screen
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
@@ -66,8 +74,6 @@ bool frame(SDL_Window *window, SDL_Renderer *renderer, std::vector<Circle> &circ
     }
     // Make frame visible
     SDL_RenderPresent(renderer);
-    // return and say the next frame should happen
-    return true;
 }
 
 void draw_circle(SDL_Renderer *renderer, Circle &circle) {
