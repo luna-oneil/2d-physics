@@ -32,8 +32,12 @@ int main(int argc, char* argv[]) {
     }
     // initializes list of circles with two circles
     std::vector<Circle> circles;
-    circles.push_back(Circle(400.0, 300.0, 100, 240, 230, 30));
     circles.push_back(Circle(500.0, 100.0, 50, 200, 20, 80));
+    circles.push_back(Circle(600.0, 100.0, 50, 200, 20, 80));
+    circles.push_back(Circle(700.0, 100.0, 50, 200, 20, 80));
+    circles.push_back(Circle(700.0, 200.0, 50, 200, 20, 80));
+    circles.push_back(Circle(700.0, 800.0, 50, 200, 20, 80));
+    circles.push_back(Circle(700.0, 600.0, 50, 200, 20, 80));
     // initalizes list of walls with 4 walls
     std::vector<Wall> walls;
     walls.push_back(Wall(true, 0));
@@ -77,9 +81,14 @@ void circle_movement(std::vector<Circle> &circles, std::vector<Wall> &walls) {
         circles[i].accelerate(distrib(gen), distrib(gen));
         circles[i].move();
         // collisions between circles (j = i + 1 to not check previous circles)
-        //for (long long unsigned int j = i + 1; j < circles.size(); j++) {
-        //
-        //}
+        for (long long unsigned int j = i + 1; j < circles.size(); j++) {
+            if (is_colliding(circles[i], circles[j])) {
+                circles[i].mirror_vel(true);
+                circles[i].mirror_vel(false);
+                circles[j].mirror_vel(false);
+                circles[j].mirror_vel(true);
+            }
+        }
         // collisions between circles and walls
         for (long long unsigned int j = 0; j < walls.size(); j++) {
             if (!is_colliding(circles[i], walls[j])) {
@@ -130,7 +139,7 @@ void draw_circle(SDL_Renderer *renderer, Circle &circle) {
 }
 
 double get_distance(const Vector2d &v1, const Vector2d &v2) {
-    return std::sqrt(std::pow(v1.x + v2.x, 2) + std::pow(v1.y + v2.y, 2));
+    return std::sqrt(std::pow(v1.x - v2.x, 2) + std::pow(v1.y - v2.y, 2));
 }
 
 bool is_colliding(const Circle &c1, const Circle &c2) {
