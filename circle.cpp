@@ -34,3 +34,11 @@ void Circle::accelerate(double x, double y) {
 void Circle::move() {
     pos.move(vel);
 }
+
+void Circle::mirror_vel(bool y_axis) {
+    if (y_axis) {
+        vel.y = -vel.y;
+        return;
+    }
+    vel.x = -vel.x;
+}

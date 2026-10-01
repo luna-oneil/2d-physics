@@ -22,4 +22,5 @@ public:
     void accelerate(Vector2d &vector);
     void accelerate(double x, double y);
     void move();
+    void mirror_vel(bool y_axis);
 };
