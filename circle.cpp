@@ -27,6 +27,10 @@ void Circle::accelerate(Vector2d &vector) {
     vel.move(vector);
 }
 
+void Circle::set_vel(const Vector2d &vector) {
+    vel = vector;
+}
+
 void Circle::accelerate(double x, double y) {
     vel.move(x, y);
 }

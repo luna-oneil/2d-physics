@@ -8,6 +8,7 @@
 #include "wall.hpp"
 
 bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles, std::vector<Wall> &walls);
+void random_circle_acceleration(std::vector<Circle> &circles);
 void circle_movement(std::vector<Circle> &circles, std::vector<Wall> &walls);
 void render(SDL_Renderer *renderer, std::vector<Circle> &circles);
 void draw_circle(SDL_Renderer *renderer, Circle &circle);
@@ -15,6 +16,7 @@ double get_distance(const Vector2d &v1, const Vector2d &v2);
 bool is_colliding(const Circle &c1, const Circle &c2);
 bool is_colliding(const Circle &c, const Wall &w);
 Vector2d normal_vector(const Circle &c1, const Circle &c2);
+void circle_collision(Circle &c1, Circle &c2);
 
 int main(int argc, char* argv[]) {
     // Initialize SDL
@@ -66,6 +68,7 @@ bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles, std::vector<Wal
             return false;
         }
     }
+    random_circle_acceleration(circles);
     // circle movement
     circle_movement(circles, walls);
     // rendering
@@ -74,20 +77,22 @@ bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles, std::vector<Wal
     return true;
 }
 
-void circle_movement(std::vector<Circle> &circles, std::vector<Wall> &walls) {
+void random_circle_acceleration(std::vector<Circle> &circles) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> distrib(-0.0025, 0.0025);
     for (long long unsigned int i = 0; i < circles.size(); i++) {
         circles[i].accelerate(distrib(gen), distrib(gen));
+    }
+}
+
+void circle_movement(std::vector<Circle> &circles, std::vector<Wall> &walls) {
+    for (long long unsigned int i = 0; i < circles.size(); i++) {
         circles[i].move();
         // collisions between circles (j = i + 1 to not check previous circles)
         for (long long unsigned int j = i + 1; j < circles.size(); j++) {
             if (is_colliding(circles[i], circles[j])) {
-                circles[i].mirror_vel(true);
-                circles[i].mirror_vel(false);
-                circles[j].mirror_vel(false);
-                circles[j].mirror_vel(true);
+                circle_collision(circles[i], circles[j]);
             }
         }
         // collisions between circles and walls
@@ -99,6 +104,20 @@ void circle_movement(std::vector<Circle> &circles, std::vector<Wall> &walls) {
             circles[i].mirror_vel(!walls[j].vertical);
         }
     }
+}
+
+void circle_collision(Circle &c1, Circle &c2) {
+    Vector2d normal = normal_vector(c1, c2);
+    Vector2d tangent = normal.rotated90();
+    double c1_normal = dot_product(normal, c1.get_vel());
+    double c1_tangent = dot_product(tangent, c1.get_vel());
+    double c2_normal = dot_product(normal, c2.get_vel());
+    double c2_tangent = dot_product(normal, c2.get_vel());
+    double temp = c1_normal;
+    c1_normal = c2_normal;
+    c2_normal = temp;
+    c1.set_vel(normal * c1_normal + tangent * c1_tangent);
+    c2.set_vel(normal * c2_normal + tangent * c2_tangent);
 }
 
 void render(SDL_Renderer *renderer, std::vector<Circle> &circles) {

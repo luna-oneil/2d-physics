@@ -21,4 +21,6 @@ public:
     Vector2d& operator-=(const Vector2d &right);
     Vector2d& operator*=(double scalar);
     Vector2d& operator/=(double scalar);
+    // friend functions
+    friend double dot_product(const Vector2d &v1, const Vector2d &v2);
 };
