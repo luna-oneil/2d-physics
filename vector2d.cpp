@@ -33,3 +33,36 @@ Vector2d Vector2d::operator-(const Vector2d &right) const {
     Vector2d result(x - right.x, y - right.y);
     return result;
 }
+
+Vector2d Vector2d::operator*(double scalar) const {
+    Vector2d result(x * scalar, y * scalar);
+    return result;
+}
+
+Vector2d Vector2d::operator/(double scalar) const {
+    Vector2d result(x / scalar, y / scalar);
+    return result;
+}
+
+Vector2d& Vector2d::operator+=(const Vector2d &right) {
+    x += right.x;
+    y += right.y;
+    return *this;
+}
+
+Vector2d& Vector2d::operator-=(const Vector2d &right) {
+    x -= right.x;
+    y -= right.y;
+    return *this;
+}
+Vector2d& Vector2d::operator*=(double scalar) {
+    x *= scalar;
+    y *= scalar;
+    return *this;
+}
+
+Vector2d& Vector2d::operator/=(double scalar) {
+    x /= scalar;
+    y /= scalar;
+    return *this;
+}
