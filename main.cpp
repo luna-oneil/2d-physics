@@ -14,6 +14,7 @@ void draw_circle(SDL_Renderer *renderer, Circle &circle);
 double get_distance(const Vector2d &v1, const Vector2d &v2);
 bool is_colliding(const Circle &c1, const Circle &c2);
 bool is_colliding(const Circle &c, const Wall &w);
+Vector2d normal_vector(const Circle &c1, const Circle &c2);
 
 int main(int argc, char* argv[]) {
     // Initialize SDL
@@ -151,4 +152,13 @@ bool is_colliding(const Circle &c, const Wall &w) {
         return c.get_radius() >= std::abs(c.get_pos().x - w.location);
     }
     return c.get_radius() >= std::abs(c.get_pos().y - w.location);
+}
+
+Vector2d normal_vector(const Circle &c1, const Circle &c2) {
+    Vector2d normal = c2.get_pos()-c1.get_pos();
+    double distance = get_distance(c1.get_pos(), c2.get_pos());
+    if (distance == 0.0) {
+        return(Vector2d());
+    }
+    return normal / distance;
 }
