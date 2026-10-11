@@ -16,6 +16,20 @@ void Vector2d::set(double x, double y) {
 }
 
 void Vector2d::set(Vector2d &vector) {
-    this->x = vector.x;
-    this->y = vector.y;
+    x = vector.x;
+    y = vector.y;
+}
+
+Vector2d Vector2d::rotated90() const {
+    return Vector2d(-y, x);
+}
+
+Vector2d Vector2d::operator+(const Vector2d &right) const {
+    Vector2d result(x + right.x, y + right.y);
+    return result;
+}
+
+Vector2d Vector2d::operator-(const Vector2d &right) const {
+    Vector2d result(x - right.x, y - right.y);
+    return result;
 }

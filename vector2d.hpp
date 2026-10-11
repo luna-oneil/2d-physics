@@ -10,4 +10,9 @@ public:
     void set(double x, double y);
     void move(Vector2d &vector);
     void set(Vector2d &vector);
+    // operator overloads
+    Vector2d operator+(const Vector2d &right) const;
+    Vector2d operator-(const Vector2d &right) const;
+    // rotates x and y 90 degrees around the origin
+    Vector2d Vector2d::rotated90() const;
 };
