@@ -3,7 +3,7 @@
 #include <cstdint>
 
 Circle::Circle(double x, double y, double radius, uint8_t r, uint8_t g, uint8_t b):
-    pos(x, y), vel(0, 0), radius(radius), color{r, g, b, 255} {}
+    pos(x, y), radius(radius), color{r, g, b, 255} {}
 
 Circle::Circle() : Circle::Circle(0, 0, 10, 255, 255, 255) {}
 
@@ -15,6 +15,10 @@ const Vector2d Circle::get_vel() const {
     return vel;
 }
 
+const Vector2d Circle::get_force() const {
+    return force;
+}
+
 const SDL_Color Circle::get_color() const {
     return color;
 }
@@ -23,19 +27,17 @@ double Circle::get_radius() const {
     return radius;
 }
 
-void Circle::accelerate(Vector2d &vector) {
-    vel.move(vector);
+void Circle::add_force(const Vector2d &new_force) {
+    force += new_force;
 }
 
 void Circle::set_vel(const Vector2d &vector) {
     vel = vector;
 }
 
-void Circle::accelerate(double x, double y) {
-    vel.move(x, y);
-}
-
 void Circle::move() {
+    vel.move(force);
+    force = Vector2d();
     pos.move(vel);
 }
 

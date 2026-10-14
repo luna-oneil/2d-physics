@@ -8,8 +8,8 @@ public:
     Vector2d(double x, double y): x(x), y(y) {}
     void move(double x, double y);
     void set(double x, double y);
-    void move(Vector2d &vector);
-    void set(Vector2d &vector);
+    void move(const Vector2d &vector);
+    void set(const Vector2d &vector);
     // rotates x and y 90 degrees around the origin
     Vector2d rotated90() const;
     // operator overloads

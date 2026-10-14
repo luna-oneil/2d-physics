@@ -6,10 +6,13 @@
 #include <cmath>
 #include "circle.hpp"
 #include "wall.hpp"
+#include "spring.hpp"
 
-bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles, std::vector<Wall> &walls);
+bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles, std::vector<Spring> &springs, std::vector<Wall> &walls);
 void random_circle_acceleration(std::vector<Circle> &circles);
 void circle_movement(std::vector<Circle> &circles, std::vector<Wall> &walls);
+void spring_force(std::vector<Spring> &springs, std::vector<Circle> &circles);
+void spring_force(Spring &spring, std::vector<Circle> &circles);
 void render(SDL_Renderer *renderer, std::vector<Circle> &circles);
 void draw_circle(SDL_Renderer *renderer, Circle &circle);
 double get_distance(const Vector2d &v1, const Vector2d &v2);
@@ -33,14 +36,17 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
         return -1;
     }
-    // initializes list of circles with two circles
+    // initializes list of circles
     std::vector<Circle> circles;
-    circles.push_back(Circle(500.0, 100.0, 50, 200, 20, 80));
-    circles.push_back(Circle(600.0, 100.0, 50, 200, 20, 80));
+    circles.push_back(Circle(500.0, 100.0, 50, 200, 200, 80));
+    circles.push_back(Circle(600.0, 100.0, 50, 200, 200, 80));
     circles.push_back(Circle(700.0, 100.0, 50, 200, 20, 80));
     circles.push_back(Circle(700.0, 200.0, 50, 200, 20, 80));
     circles.push_back(Circle(700.0, 800.0, 50, 200, 20, 80));
     circles.push_back(Circle(700.0, 600.0, 50, 200, 20, 80));
+    // initalizes list of springs
+    std::vector<Spring> springs;
+    springs.push_back(Spring(0, 1, get_distance(circles[0].get_pos(), circles[1].get_pos()), 0.5));
     // initalizes list of walls with 4 walls
     std::vector<Wall> walls;
     walls.push_back(Wall(true, 0));
@@ -49,7 +55,7 @@ int main(int argc, char* argv[]) {
     walls.push_back(Wall(true, 1000));
     // runs the frame()
     // while loop has no body because frame both modifies state and returns whether the window is open
-    while (frame(renderer, circles, walls));
+    while (frame(renderer, circles, springs, walls));
 
     // destructions
     SDL_DestroyRenderer(renderer);
@@ -60,7 +66,7 @@ int main(int argc, char* argv[]) {
 }
 
 // returns whether the window should continue being visible
-bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles, std::vector<Wall> &walls) {
+bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles, std::vector<Spring> &springs, std::vector<Wall> &walls) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         // set return value to close window
@@ -69,6 +75,7 @@ bool frame(SDL_Renderer *renderer, std::vector<Circle> &circles, std::vector<Wal
         }
     }
     random_circle_acceleration(circles);
+    spring_force(springs, circles);
     // circle movement
     circle_movement(circles, walls);
     // rendering
@@ -82,8 +89,27 @@ void random_circle_acceleration(std::vector<Circle> &circles) {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> distrib(-0.0025, 0.0025);
     for (long long unsigned int i = 0; i < circles.size(); i++) {
-        circles[i].accelerate(distrib(gen), distrib(gen));
+        circles[i].add_force(Vector2d(distrib(gen), distrib(gen)));
     }
+}
+
+void spring_force(std::vector<Spring> &springs, std::vector<Circle> &circles) {
+    for(int i = 0; i < springs.size(); i++) {
+        spring_force(springs[i], circles);
+    }
+}
+
+void spring_force(Spring &spring, std::vector<Circle> &circles) {
+    Circle &c1 = circles[spring.get_ci1()];
+    Circle &c2 = circles[spring.get_ci2()];
+    Vector2d direction = normal_vector(c1, c2);
+    double length = get_distance(c1.get_pos(), c2.get_pos());
+    double stretch = length - spring.get_rest_len();
+    double magnitude = spring.get_stiffness() * stretch;
+    Vector2d force = direction * magnitude;
+    c1.add_force(force);
+    // doing negatives (should just have an overload for this)
+    c2.add_force(Vector2d()-force);
 }
 
 void circle_movement(std::vector<Circle> &circles, std::vector<Wall> &walls) {

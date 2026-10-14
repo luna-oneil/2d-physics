@@ -8,6 +8,7 @@ class Circle {
 private:
     Vector2d pos;
     Vector2d vel;
+    Vector2d force;
     double radius;
     SDL_Color color;
 
@@ -17,10 +18,10 @@ public:
     Circle();
     const Vector2d get_pos() const;
     const Vector2d get_vel() const;
+    const Vector2d get_force() const;
     const SDL_Color get_color() const;
     double get_radius() const;
-    void accelerate(Vector2d &vector);
-    void accelerate(double x, double y);
+    void add_force(const Vector2d &new_force);
     void move();
     void mirror_vel(bool y_axis);
     void set_vel(const Vector2d &vector);
