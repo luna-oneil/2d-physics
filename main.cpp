@@ -88,13 +88,13 @@ void random_circle_acceleration(std::vector<Circle> &circles) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> distrib(-0.0025, 0.0025);
-    for (long long unsigned int i = 0; i < circles.size(); i++) {
+    for (std::size_t i = 0; i < circles.size(); i++) {
         circles[i].add_force(Vector2d(distrib(gen), distrib(gen)));
     }
 }
 
 void spring_force(std::vector<Spring> &springs, std::vector<Circle> &circles) {
-    for(int i = 0; i < springs.size(); i++) {
+    for(std::size_t i = 0; i < springs.size(); i++) {
         spring_force(springs[i], circles);
     }
 }
@@ -113,16 +113,16 @@ void spring_force(Spring &spring, std::vector<Circle> &circles) {
 }
 
 void circle_movement(std::vector<Circle> &circles, std::vector<Wall> &walls) {
-    for (long long unsigned int i = 0; i < circles.size(); i++) {
+    for (std::size_t i = 0; i < circles.size(); i++) {
         circles[i].move();
         // collisions between circles (j = i + 1 to not check previous circles)
-        for (long long unsigned int j = i + 1; j < circles.size(); j++) {
+        for (std::size_t j = i + 1; j < circles.size(); j++) {
             if (is_colliding(circles[i], circles[j])) {
                 circle_collision(circles[i], circles[j]);
             }
         }
         // collisions between circles and walls
-        for (long long unsigned int j = 0; j < walls.size(); j++) {
+        for (std::size_t j = 0; j < walls.size(); j++) {
             if (!is_colliding(circles[i], walls[j])) {
                 continue;
             }
@@ -157,7 +157,7 @@ void render(SDL_Renderer *renderer, std::vector<Circle> &circles) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     // drawing circle
-    for (long long unsigned int i = 0; i < circles.size(); i++) {
+    for (std::size_t i = 0; i < circles.size(); i++) {
         draw_circle(renderer, circles[i]);
     }
     // Make frame visible
