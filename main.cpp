@@ -139,6 +139,12 @@ void circle_collision(Circle &c1, Circle &c2) {
     double c1_tangent = dot_product(tangent, c1.get_vel());
     double c2_normal = dot_product(normal, c2.get_vel());
     double c2_tangent = dot_product(tangent, c2.get_vel());
+
+    // return if they aren't moving towards each other
+    if (c1_normal <= c2_normal) {
+        return;
+    }
+
     double temp = c1_normal;
     c1_normal = c2_normal;
     c2_normal = temp;
